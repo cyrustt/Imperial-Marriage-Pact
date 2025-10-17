@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Game
+{% endblock %}
+
+{% block main %}
+   <div class="position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center">
+        {% if media["source"] != "x" %}
+            {% if media["type"] == "video" %}
+                <video width="70%" class="m-auto mb-5" muted autoplay>
+                    <source src={{media["source"]}} type="video/mp4">
+                </video>
+            {% else %}
+                <img src={{media["source"]}} style="width: 70%" class="m-auto mb-5">
+            {% endif %}
+        {% endif %}
+        <form action="/gamestart" method="post" class="d-flex flex-column justify-content-start m-auto">
+            <span>
+                <h2 >{{ question }}
+            </span>
+            
+            <input type="hidden" name="quiz_counter" value="{{quiz_counter}}">
+
+            {% for i in range(0, no) %}
+                {% if (i+1 == key) %}
+                    <div>
+                        <button type="submit" disabled name="option" value="{{i+1}}" class="m-2 btn btn-success" style="text-align:left; padding-left:10px">{{answer[i]}}</button>
+                    </div>
+                {% else %}
+                    <div>
+                        <button type="submit" disabled name="option" value="{{i+1}}" class="m-2 btn btn-secondary" style="text-align:left; padding-left:10px">{{answer[i]}}</button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </form>
+        {% if (quiz_counter == "9") %}
+
+            <form action="/game" method="get">
+                <input type="hidden" name="quiz_counter" value="0">
+                <button type="submit" class="btn btn-primary position-relative start-50 translate-middle mt-4">Restart Game</button>
+            </form>
+            <form action="/" method="get">
+                <button type="submit" class="btn btn-primary position-relative start-50 translate-middle mt-4">Return Home</button>
+            </form>
+
+        {% else %}
+
+            <form action="/gamestart" method="get">
+                <input type="hidden" name="increment" value=1>
+                <input type="hidden" name="quiz_counter" value="{{quiz_counter}}">
+                <button type="submit" class="btn btn-primary">Next Question</button>
+            </form>
+
+        {% endif %}
+        
+   </div>
+{% endblock %}
