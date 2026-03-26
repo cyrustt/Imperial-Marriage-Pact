@@ -21,7 +21,7 @@ As described in a student news feature, the project was:
 
 > “an algorithm-based form that matches students to find the optimal life partner”  [oai_citation:0‡Felix](https://felixonline.co.uk/articles/imperial-marriage-pact/?utm_source=chatgpt.com)  
 
-🔗 Article: https://felixonline.co.uk/articles/imperial-marriage-pact/
+Article: https://felixonline.co.uk/articles/imperial-marriage-pact/
 
 ---
 
