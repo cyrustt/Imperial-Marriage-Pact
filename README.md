@@ -18,12 +18,12 @@ flowchart LR
 
 ## How it works
 
-1. **Collect responses** — participants answer demographic, preference, and 49 compatibility questions through Google Forms.
-2. **Prepare the data** — pandas loads the spreadsheet, normalizes column names, and constructs one participant record per response.
-3. **Model compatibility** — survey answers become numerical vectors. Euclidean distance measures similarity, while mutually incompatible gender, age, or race preferences receive distance penalties.
-4. **Create preference rankings** — every participant receives an ordered list of candidates based on the resulting distance.
-5. **Generate pairings** — a preference-based matching heuristic, inspired by stable matching, works through those rankings to assign pairs.
-6. **Select and export a run** — the pipeline repeats the randomized assignment process and keeps the run with the most high-compatibility matches. It writes separate matched and unmatched sheets to Excel.
+1. **Collect responses:** Participants answer demographic, preference, and 49 compatibility questions through Google Forms.
+2. **Prepare the data:** pandas loads the spreadsheet, normalizes column names, and constructs one participant record per response.
+3. **Model compatibility:** Survey answers become numerical vectors. Euclidean distance measures similarity, while mutually incompatible gender, age, or race preferences receive distance penalties.
+4. **Create preference rankings:** Every participant receives an ordered list of candidates based on the resulting distance.
+5. **Generate pairings:** A preference-based matching heuristic, inspired by stable matching, works through those rankings to assign pairs.
+6. **Select and export a run:** The pipeline repeats the randomized assignment process and keeps the run with the most high-compatibility matches. It writes separate matched and unmatched sheets to Excel.
 
 ## What I built
 
