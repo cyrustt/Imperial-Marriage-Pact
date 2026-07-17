@@ -1,100 +1,75 @@
-# Imperial Marriage Pact (Custom Implementation)
+# Imperial Marriage Pact
 
-This project is a student-built implementation of a campus-wide matching system inspired by the Marriage Pact concept, which uses algorithms to pair individuals based on compatibility.
+A backend matching pipeline that turns survey responses into ranked preferences and final pairings.
 
-The version I worked on focuses on building a functional matching pipeline from survey data to final pairings, with an emphasis on algorithm design and practical deployment.
+This project was built for a campus-wide matching initiative. Responses were collected with Google Forms, exported to Excel, and processed with Python. There was no custom frontend: the engineering focus was the data pipeline, compatibility model, and matching workflow.
 
----
+## Project flow
 
-## Overview
+```mermaid
+flowchart LR
+    A[Google Form responses] --> B[Excel export]
+    B --> C[Clean and validate responses]
+    C --> D[Build participant feature vectors]
+    D --> E[Score and rank compatible candidates]
+    E --> F[Generate pairings]
+    F --> G[Export matched and unmatched results]
+```
 
-The goal of the project is to:
+## How it works
 
-- Collect structured preference data via survey  
-- Convert qualitative responses into numerical features  
-- Compute compatibility between participants  
-- Generate stable matches using algorithmic methods  
+1. **Collect responses** — participants answer demographic, preference, and 49 compatibility questions through Google Forms.
+2. **Prepare the data** — pandas loads the spreadsheet, normalizes column names, and constructs one participant record per response.
+3. **Model compatibility** — survey answers become numerical vectors. Euclidean distance measures similarity, while mutually incompatible gender, age, or race preferences receive distance penalties.
+4. **Create preference rankings** — every participant receives an ordered list of candidates based on the resulting distance.
+5. **Generate pairings** — a preference-based matching heuristic, inspired by stable matching, works through those rankings to assign pairs.
+6. **Select and export a run** — the pipeline repeats the randomized assignment process and keeps the run with the most high-compatibility matches. It writes separate matched and unmatched sheets to Excel.
 
-The system is inspired by the **Gale-Shapley stable matching algorithm**, which ensures that no two individuals would both prefer each other over their assigned match.
+## What I built
 
-As described in a student news feature, the project was:
+- End-to-end processing from survey export to deliverable results
+- Participant data model and compatibility constraints
+- Pairwise scoring and preference-list construction
+- Matching and repeated-run selection logic
+- Excel reporting for matched and unmatched participants
 
-> “an algorithm-based form that matches students to find the optimal life partner”  [oai_citation:0‡Felix](https://felixonline.co.uk/articles/imperial-marriage-pact/?utm_source=chatgpt.com)  
+## Technical decisions
 
-Article: https://felixonline.co.uk/articles/imperial-marriage-pact/
+- **Python, pandas, and NumPy** keep the batch workflow simple and auditable.
+- **Vector distance** provides an interpretable baseline for comparing survey responses.
+- **Soft penalties** allow preference constraints to affect rankings without making the search brittle.
+- **Repeated randomized runs** reduce sensitivity to the initial participant ordering.
 
----
+## Repository structure
 
-## Implementation
+```text
+files/
+├── marriagepact2.py   # fuller implementation and reporting workflow
+└── marriagepact3.py   # streamlined matching pipeline
+```
 
-The core implementation is located in:
+## Running the analysis
 
-/files
+Use a local spreadsheet with the column names expected by the script. Participant data is sensitive and should not be committed to the repository.
 
-This subfolder contains:
-- the matching algorithm  
-- data preprocessing logic  
-- compatibility scoring functions  
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install pandas numpy xlsxwriter openpyxl
+python files/marriagepact3.py
+```
 
-The pipeline works as follows:
+Before running it on a new form, update the input filename and participant count in the script.
 
-1. **Survey Processing**
-   - Responses are mapped to numerical values  
+## Limitations and next steps
 
-2. **Feature Construction**
-   - Each participant is represented as a vector of preferences  
+- The current system is a batch analysis pipeline, not a hosted application.
+- The matching routine is inspired by stable matching but is not presented as a formally verified Gale–Shapley implementation.
+- Preference penalties and the 80% selection threshold are hand-designed and would benefit from evaluation against participant feedback.
+- A future version could add schema validation, automated tests, configuration files, and an administrator-facing results dashboard.
 
-3. **Compatibility Scoring**
-   - Pairwise scores are computed between participants  
+## Context
 
-4. **Matching Algorithm**
-   - A stable matching algorithm is used to generate final pairings  
+This is an independent student implementation inspired by the broader Marriage Pact concept. It is not affiliated with the official Marriage Pact organization.
 
----
-
-## What I Built
-
-Through this project, I implemented:
-
-- Data processing pipeline from raw survey inputs  
-- Compatibility scoring logic  
-- Matching algorithm (stable matching variant)  
-- End-to-end workflow from input → output  
-
-The system was designed and implemented under real constraints (time, data quality, participation imbalance), which required making practical tradeoffs in both modeling and engineering.
-
----
-
-## Challenges
-
-Some key challenges included:
-
-- Designing a scoring system from subjective survey data  
-- Handling imbalanced participant groups  
-- Ensuring stability and fairness in matching  
-- Working with incomplete or noisy real-world inputs  
-
----
-
-## Notes
-
-- This implementation is independent and not affiliated with the official Marriage Pact organization  
-- The goal was to build a working system rather than replicate proprietary methods  
-
----
-
-## Why this project
-
-This project reflects my interest in:
-
-- algorithmic decision-making  
-- translating theory (matching algorithms) into real systems  
-- building end-to-end products from scratch  
-
----
-
-## Future Improvements
-
-- More advanced compatibility modeling (e.g. learned weights)  
-- Better handling of heterogeneous preferences  
-- Scalable deployment for larger participant pools  
+A student publication covered the campus initiative: [Imperial College's Marriage Pact](https://felixonline.co.uk/articles/imperial-marriage-pact/).
